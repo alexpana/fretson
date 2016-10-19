@@ -51,26 +51,32 @@
 
 (defn print-fret
   [note]
-  (print "--" note)
-  (if (= (count note) 2)
-    (print " --|")
-    (print " ---|")))
+  (if (is-sharp note)
+    (print (clojure.core/format "-- %s --|" note))
+    (print (clojure.core/format "-- %s ---|" note))))
 
 (defn print-fret-hidden
   []
   (print "--------|"))
 
 (defn print-frets
-  [note fret_count]
-  (when (> fret_count 0)
-    (do
-      (print-fret note)
-      (print-frets (next-note note) (dec fret_count)))))
+  [frets]
+  (for [fret frets]
+    (print-fret fret)))
+
+(defn gen-notes
+  [start count]
+  (loop [index count note start notes []]
+    (if (<= index 0)
+      notes
+      (recur (dec index) (next-note note) (conj notes note)))))
 
 (defn print-string
   [note fret_count]
-  (print-nut note)
-  (print-frets (next-note note) fret_count))
+  (do
+    (print "print-string [" note ", " fret_count "]\n")
+    (print-nut note)
+    (print-frets (gen-notes note fret_count))))
 
 (defn fret-guide-at
   [index]
@@ -114,3 +120,5 @@
 ;; TODO replace recursion with the 'recur' operator http://clojure.org/reference/special_forms#recur
 
 ;; TODO fretboard length should be a program argument
+
+;; TODO print-fretboard should receive a list of strings
