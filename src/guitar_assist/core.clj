@@ -32,7 +32,7 @@
 
 (defn n-semitones-from
   [note distance]
-  (if (>= distance 0)
+  (if (> distance 0)
     (n-semitones-from (next-note note) (dec distance))
     note))
 
@@ -74,7 +74,6 @@
 (defn print-string
   [note fret_count]
   (do
-    (print "print-string [" note ", " fret_count "]\n")
     (print-nut note)
     (print-frets (gen-notes note fret_count))))
 
