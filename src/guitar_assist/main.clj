@@ -1,5 +1,6 @@
 (ns guitar-assist.main
-  (:require [guitar-assist.core :as core]))
+  (:require [guitar-assist.core :as core])
+  (:require [guitar-assist.printer :as printer]))
 
 (defn -main [& args]
-  (core/print-fretboard 12))
+  (printer/print-fretboard 12))

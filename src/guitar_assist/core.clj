@@ -8,116 +8,71 @@
     ("A" "A#") ("A#" "B") ("B" "C") ("C" "C#") ("C#" "D")
     ("D" "D#") ("D#" "E")))
 
+(def scale-intervals
+  {
+   :major [2 2 1 2 2 2 1]
+   :minor [2 1 2 2 1 2 2]
+   :chromatic [1 1 1 1 1 1 1 1 1 1 1 1]})
+
+(def scale-modes
+  {
+   :ionian     {:offset 0 :intervals [2 2 1 2 2 2 1]}
+   :dorian     {:offset 1 :intervals [2 1 2 2 2 1 2]}
+   :phrygian   {:offset 2 :intervals [1 2 2 2 1 2 2]}
+   :lydian     {:offset 3 :intervals [2 2 2 1 2 2 1]}
+   :myxolydian {:offset 4 :intervals [2 2 1 2 2 1 2]}
+   :aeolian    {:offset 5 :intervals [2 1 2 2 1 2 2]}
+   :locrian    {:offset 6 :intervals [1 2 2 1 2 2 2]}})
+
 (def dots '("⠂" "⠆"))
 
 (def FRET_WIDTH 9)
 (def NUT_WIDTH 4)
 
-(defn next-note
-  [note]
+(defn next-note [note]
   (second (first (filter #(= note (first %)) notes))))
 
-(defn previous-note
-  [note]
+(defn previous-note [note]
   (first (first (filter #(= note (second %)) notes))))
 
-(defn is-sharp
-  [note]
+(defn is-sharp [note]
   (not (nil? (str/index-of note "#"))))
 
-;; TODO: implement
-(defn interval
-  [from to]
-  0)
+(defn interval [from to]
+  (if (not= to from)
+    (inc (interval (next-note from) to))
+    0))
 
-(defn n-semitones-from
-  [note distance]
+(defn n-semitones-from [note distance]
   (if (> distance 0)
     (n-semitones-from (next-note note) (dec distance))
     note))
 
-(defn print-notes
-  [from count]
+(defn generate-scale [root steps]
+  (loop [result [] note root s steps]
+    (if (empty? s)
+      (conj result note)
+      (recur (conj result note) (n-semitones-from note (first s)) (drop 1 s)))))
+
+(defn scale [scale-type root]
+  (generate-scale root (scale-type scale-intervals)))
+
+(defn print-notes [from count]
   (if (>= count 0)
     ((print from " ")
-     (print-notes (next-note from) (dec count)))
+      (print-notes (next-note from) (dec count)))
     (print "\n")))
 
-;; Frets
-
-(defn print-nut
-  [note]
-  (print "" note "|"))
-
-(defn print-fret
-  [note]
-  (if (is-sharp note)
-    (print (clojure.core/format "-- %s --|" note))
-    (print (clojure.core/format "-- %s ---|" note))))
-
-(defn print-fret-hidden
-  []
-  (print "--------|"))
-
-(defn print-frets
-  [frets]
-  (for [fret frets]
-    (print-fret fret)))
-
-(defn gen-notes
-  [start count]
+(defn gen-notes [start count]
   (loop [index count note start notes []]
     (if (<= index 0)
       notes
       (recur (dec index) (next-note note) (conj notes note)))))
-
-(defn print-string
-  [note fret_count]
-  (do
-    (print-nut note)
-    (print-frets (gen-notes note fret_count))))
-
-(defn fret-guide-at
-  [index]
-  (if (and (not= index 11) (>= index 3) (= (mod index 2) 1))
-    (first dots)
-    (if (and (>= index 3) (= (mod index 12) 0))
-      (second dots)
-      " ")))
-
-(defn print-fret-guide-impl
-   [size index]
-   (print "  " (fret-guide-at index) "    ")
-   (if (< index size)
-     (print-fret-guide-impl size (inc index))))
-
-(defn print-fret-guide
-  [size]
-  (print "    ")
-  (print-fret-guide-impl size 1))
-
-(defn print-fretboard
-  [size]
-  (do
-    (print-fret-guide size)
-    (print "\n")
-    (print-string "E" size)
-    (print "\n")
-    (print-string "B" size)
-    (print "\n")
-    (print-string "G" size)
-    (print "\n")
-    (print-string "D" size)
-    (print "\n")
-    (print-string "A" size)
-    (print "\n")
-    (print-string "E" size)
-    (print "\n")))
-
-;; TODO print frets should receive a list of notes (possibly hidden) to allow composability and masking ()
 
 ;; TODO replace recursion with the 'recur' operator http://clojure.org/reference/special_forms#recur
 
 ;; TODO fretboard length should be a program argument
 
 ;; TODO print-fretboard should receive a list of strings
+
+;; TODO (scales) should contain an inifite number of notes
