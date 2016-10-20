@@ -20,7 +20,7 @@
    :dorian     {:offset 1 :intervals [2 1 2 2 2 1 2]}
    :phrygian   {:offset 2 :intervals [1 2 2 2 1 2 2]}
    :lydian     {:offset 3 :intervals [2 2 2 1 2 2 1]}
-   :myxolydian {:offset 4 :intervals [2 2 1 2 2 1 2]}
+   :mixolydian {:offset 4 :intervals [2 2 1 2 2 1 2]}
    :aeolian    {:offset 5 :intervals [2 1 2 2 1 2 2]}
    :locrian    {:offset 6 :intervals [1 2 2 1 2 2 2]}})
 
