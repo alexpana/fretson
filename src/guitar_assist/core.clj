@@ -24,9 +24,14 @@
    :aeolian    {:offset 5 :intervals [2 1 2 2 1 2 2]}
    :locrian    {:offset 6 :intervals [1 2 2 1 2 2 2]}})
 
+(def guitar-tunings
+  {
+   :standard ["E" "B" "G" "D" "A" "E"]})
+
 (def dots '("⠂" "⠆"))
 
 (def FRET_WIDTH 9)
+
 (def NUT_WIDTH 4)
 
 (defn next-note [note]
@@ -54,20 +59,25 @@
       (conj result note)
       (recur (conj result note) (n-semitones-from note (first s)) (drop 1 s)))))
 
-(defn scale [scale-type root]
+(defn scale [root scale-type]
   (generate-scale root (scale-type scale-intervals)))
 
-(defn print-notes [from count]
-  (if (>= count 0)
-    ((print from " ")
-      (print-notes (next-note from) (dec count)))
-    (print "\n")))
+(defn scale-mode [root mode]
+  (generate-scale
+   (nth (scale root :major) (:offset (mode scale-modes)))
+   (:intervals (mode scale-modes))))
+
+(defn tuning [mode]
+  (mode guitar-tunings))
 
 (defn gen-notes [start count]
   (loop [index count note start notes []]
     (if (<= index 0)
       notes
       (recur (dec index) (next-note note) (conj notes note)))))
+
+(defn find-index [what coll]
+  (first (keep-indexed (fn [index value] (when (= what value) index)) coll)))
 
 ;; TODO replace recursion with the 'recur' operator http://clojure.org/reference/special_forms#recur
 
