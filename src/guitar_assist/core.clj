@@ -118,11 +118,3 @@
 
 (defn note-name [note]
   (str ((keyword (subs note 0 1)) note-names) (subs note 1)))
-
-;; TODO replace recursion with the 'recur' operator http://clojure.org/reference/special_forms#recur
-
-;; TODO fretboard length should be a program argument
-
-;; TODO print-fretboard should receive a list of strings
-
-;; TODO (scales) should contain an inifite number of notes
