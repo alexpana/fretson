@@ -1,14 +1,8 @@
-# guitar-assist
+# fretson 
 
-A Clojure library designed to ... well, that part is up to you.
+Guitar teaching assistant with a focus on musical theory.
 
 ## Usage
 
-FIXME
+Only repl support for now. 
 
-## License
-
-Copyright © 2016 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.

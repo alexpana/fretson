@@ -1,6 +1,6 @@
-(ns guitar-assist.core-test
+(ns fretson.core-test
   (:require [clojure.test :refer :all]
-            [guitar-assist.core :refer :all]))
+            [fretson.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

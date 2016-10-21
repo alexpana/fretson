@@ -1,4 +1,4 @@
-(ns guitar-assist.core
+(ns fretson.core
   (:require [clojure.string :as str]))
 
 (defrecord Note [name octave])

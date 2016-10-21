@@ -1,5 +1,7 @@
-(ns guitar-assist.printer
-  (:require [guitar-assist.core :refer :all]))
+(ns fretson.printer
+  (:require [fretson.core :refer :all]))
+
+(def dots ["." ":"])
 
 (defn print-nut [note]
   (print "" note "|"))
@@ -61,7 +63,7 @@
 (defn notes-per-string
   [tuning scale]
   (partition 3 (take
-                (* 3 (count (guitar-assist.core/tuning tuning)))
+                (* 3 (count (fretson.core/tuning tuning)))
                 (cycle (take 7 scale)))))
 
 (defn print-fretboard-with-mask [strings size mask]
@@ -110,4 +112,4 @@
   (print-fretboard-with-mask
    (tuning :standard)
    size
-   (guitar-assist.core/scale root scale)))
+   (fretson.core/scale root scale)))
