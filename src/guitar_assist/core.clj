@@ -8,6 +8,17 @@
     ("A" "A#") ("A#" "B") ("B" "C") ("C" "C#") ("C#" "D")
     ("D" "D#") ("D#" "E")))
 
+(def note-names
+  {
+   :A "La"
+   :B "Si"
+   :C "Do"
+   :D "Re"
+   :E "Mi"
+   :F "Fa"
+   :G "Sol"
+   })
+
 (def scale-intervals
   {
    :major [2 2 1 2 2 2 1]
@@ -24,15 +35,36 @@
    :aeolian    {:offset 5 :intervals [2 1 2 2 1 2 2]}
    :locrian    {:offset 6 :intervals [1 2 2 1 2 2 2]}})
 
+(def intervals
+  {
+   :root             0
+   :perfect-unison   0
+   :minor-second     1
+   :major-second     2
+   :minor-third      3
+   :major-third      4
+   :perfect-fourth   5
+   :augmented-fourth 6
+   :perfect-fifth    7
+   :minor-sixth      8
+   :major-sixth      9
+   :minor-seventh    10
+   :major-seventh    11
+   :octave           12
+   })
+
+(def chord-intervals
+  {
+   :major         [:root :major-third :perfect-fifth]
+   :minor         [:root :minor-third :perfect-fifth]
+   :major7        [:root :major-third :perfect-fifth :major-seventh]
+   :major-minor7  [:root :minor-third :perfect-fifth :major-seventh]
+   :minor7        [:root :minor-third :perfect-fifth :minor-seventh]
+   })
+
 (def guitar-tunings
   {
    :standard ["E" "B" "G" "D" "A" "E"]})
-
-(def dots '("⠂" "⠆"))
-
-(def FRET_WIDTH 9)
-
-(def NUT_WIDTH 4)
 
 (defn next-note [note]
   (second (first (filter #(= note (first %)) notes))))
@@ -78,6 +110,14 @@
 
 (defn find-index [what coll]
   (first (keep-indexed (fn [index value] (when (= what value) index)) coll)))
+
+(defn chord [root type]
+  (for [interval (type chord-intervals)]
+    (n-semitones-from root (interval intervals))))
+
+
+(defn note-name [note]
+  (str ((keyword (subs note 0 1)) note-names) (subs note 1)))
 
 ;; TODO replace recursion with the 'recur' operator http://clojure.org/reference/special_forms#recur
 

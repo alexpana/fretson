@@ -13,10 +13,8 @@
   (print "--------|"))
 
 (defn print-frets
-  
   ([frets]
    (print-frets frets some?))
-  
   ([frets pred]
    (do
      (doall
@@ -28,7 +26,7 @@
 (defn print-string
   ([note fret_count]
    (print-string note fret_count some?))
-  
+
   ([note fret_count pred]
    (do
      (print-nut note)
