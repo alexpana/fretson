@@ -1,5 +1,6 @@
 (ns fretson.printer
-  (:require [fretson.core :refer :all]))
+  (:require [fretson.core :refer :all]
+            [clojure.string :as string]))
 
 (def dots ["." ":"])
 
@@ -66,6 +67,11 @@
                 (* 3 (count (fretson.core/tuning tuning)))
                 (cycle (take 7 scale)))))
 
+(defn pretty-chord-intervals [chord]
+  (map #(string/capitalize (string/replace (name %) "-" " ")) (chord core/chord-intervals)))
+
+;; Fretboard
+
 (defn print-fretboard-with-mask [strings size mask]
   (do
     (print-fret-guide size)
@@ -96,7 +102,7 @@
        (some
         #(= f %)
         (nth (notes-per-string :standard (scale-mode root mode)) s)))))
-  
+
 (defn print-scale-mode
   [root mode]
   (print-fretboard-pred

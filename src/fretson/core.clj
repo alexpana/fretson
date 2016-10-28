@@ -64,7 +64,8 @@
 
 (def guitar-tunings
   {
-   :standard ["E" "B" "G" "D" "A" "E"]})
+   :standard ["E" "B" "G" "D" "A" "E"]
+   :drop-c ["D" "A" "F" "C" "G" "C"]})
 
 (defn next-note [note]
   (second (first (filter #(= note (first %)) notes))))
@@ -84,6 +85,9 @@
   (if (> distance 0)
     (n-semitones-from (next-note note) (dec distance))
     note))
+
+(defn tuning-distance [tuning-from tuning-to]
+  (for [pair (map vector tuning-from tuning-to)] (interval (first pair) (second pair))))
 
 (defn generate-scale [root steps]
   (loop [result [] note root s steps]
